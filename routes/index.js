@@ -16,6 +16,14 @@ async function chatWithAI(pictureName) {
   return completion.choices[0].message.content
 }
 
+async function chatWithChatGPT(messages) {
+  const completion = await openai.chat.completions.create({
+    messages: messages,
+    model: "gpt-3.5-turbo"
+  }) 
+  return completion.choices[0].message.content
+}
+
 
 
 /* GET home page. */
@@ -27,8 +35,19 @@ router.get('/AACProgram', (request, response, next) => {
   response.render('AACProgram')
 })
 
+router.get('/AACProgram2', (request, response, next) => {
+  response.render('AACProgram2')
+})
+
 router.get('/chatWithAI/:id', async (request, response, next) => {
   res = await chatWithAI(request.params.id)
+  response.end(res)
+})
+
+router.post('/chatWithChatGPT', async (request, response, next) => {
+  requestData = request.body.messages
+  console.log(requestData)
+  res = await chatWithChatGPT(requestData)
   response.end(res)
 })
 
